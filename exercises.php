@@ -12,6 +12,15 @@ ul#exer a {
 ';
 
 include("incl/header.php");
+
+$title = "Webbserv1: Övningar";
+$pageId = "viewsource";
+
+// Include code from filefinder.php to display navigator
+$sourceBasedir = dirname(__FILE__);
+$sourceNoEcho = true;
+include("filefinder.php");
+$pageStyle = $sourceStyle;
 ?>
 
 <!-- sidans huvudinnehåll  -->
@@ -22,7 +31,7 @@ include("incl/header.php");
 
         <!-- Menyn med övningar  -->
         <h3>Mina övningar</h3>
-        <nav>
+        <!-- <nav>
             <ul id="exer">
                 <li id="grunder"><a href="exercises/grunder.php" target="_blank">Grunder 1-7</a></li>
                 <li id="funktioner"><a href="exercises/funktioner.php" target="_blank">Funktioner</a></li>
@@ -30,7 +39,9 @@ include("incl/header.php");
                 <li id="formquiz3"><a href="exercises/form-quiz-3" target="_blank">Form Quiz 3</a></li>
                 <li id="string4"><a href="exercises/string4.php" target="_blank">Textsträng 4</a></li>
             </ul>
-        </nav>
+        </nav> -->
+        <?php echo "$sourceBody"; ?>
+        <hr>
     </aside>
 
     <article class="justify border">
