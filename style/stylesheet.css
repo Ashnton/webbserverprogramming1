@@ -1,0 +1,162 @@
+/* general
+-------------------------------------------------------- 
+*/
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #fff;
+    font-family: Helvetica, sans-serif;
+    color: #333;
+}
+
+h1,
+h2 {
+    border-bottom: 1px solid #dddddd;
+}
+
+img {
+    border: 0;
+}
+
+/* page structure
+-------------------------------------------------------- 
+  Layout and size of header, content and footer
+*/
+/* set width and center page */
+header#top,
+div#content {
+    margin: 0 auto;
+    width: 960px;
+}
+
+/* add common padding to main content block */
+div#content {
+    padding: 1em 0 1em 0;
+}
+
+/*two columns */
+article {
+    width: 730px;
+    float: left;
+}
+
+aside {
+    float: left;
+    width: 230px;
+}
+
+/* footer */
+footer#bottom {
+    font: normal 0.8em Arial, Helvetica, sans-serif;
+    color: #4D4D4D;
+    padding: 10px 10px 20px 10px;
+    margin: 0 auto;
+    width: 940px;
+    background: #aaa;
+}
+
+/* the log text */
+.logga {
+    font-family: helvetica, sans-serif;
+    font-size: 60px;
+    font-weight: bold;
+}
+
+/* clearer fix */
+div#content {
+    overflow: auto;
+}
+
+/* always show scrollbar to the right  */
+body {
+    overflow-y: scroll;
+}
+
+
+/* a links
+-------------------------------------------------------- 
+*/
+a {
+    color: black;
+}
+
+a:hover {
+    text-decoration: none;
+    color: #cc2222;
+}
+
+/* navigation menu
+-------------------------------------------------------- 
+*/
+nav.navmenu {
+    font-family: arial;
+    font-weight: bold;
+    padding: 12px 12px;
+    background: #656565;
+    border: 2px solid #858585;
+}
+
+nav.navmenu a {
+    padding: 10px 12px;
+    text-decoration: none;
+    border: 2px solid transparent;
+    color: #fff;
+}
+
+nav.navmenu a:hover {
+    background: rgba(150, 150, 150, 1.0);
+    border: 2px solid #fff;
+}
+
+
+/* figure & figcaption
+-------------------------------------------------------- 
+*/
+figure {
+    border: 1px solid #E6E6E6;
+    padding: 4px;
+    margin: 1em;
+    background-color: white;
+}
+
+figcaption {
+    font-style: italic;
+    font-size: smaller;
+    padding-left: 1em;
+}
+
+figure.right {
+    margin-right: 1em;
+}
+
+figure.top {
+    margin-top: 0;
+}
+
+
+/* Misc classes
+-------------------------------------------------------- 
+*/
+.right {
+    float: right;
+}
+
+.left {
+    float: left;
+}
+
+
+/* highlight current choice in navigation menu
+--------------------------------------------------------
+*/
+body#start a#start-,
+body#comments a#comments-,
+body#exercises a#exercises-,
+body#viewsource a#viewsource- {
+    background: rgba(255, 255, 255, 1.0);
+    border: 2px solid #656565;
+    color: #000;
+}

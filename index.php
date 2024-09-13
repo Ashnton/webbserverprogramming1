@@ -1,25 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+include("incl/config.php");
+$title = "Webbserv1 :Start";
+$pageId = "start";
+$pageStyle = '
+figure { 
+ border-radius: 10px;
+ border-color:#333;
+ box-shadow: 10px 10px 5px #888;
+}
+';
+?>
+<?php include("incl/header.php"); ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webbserverprogrammering</title>
-</head>
+<!-- sidans huvudinnehåll  -->
+<div id="content">
+<article class="justify border">
+    <h1>Start</h1>
+    <figure class="right top">
+        <img src="img/jagohelge.jpg" alt="Per o helge">
+        <figcaption>
+            <p>Per med kompisen Helge</p>
+        </figcaption>
+    </figure>
+    <p>Hej och välkommen till Per's samlingssida i kursen 
+    webbserverprogrammering 1.        
+    </p>
 
-<body>
-    <?php
-    for ($i = 0; $i < 999; $i++) {
-        if (file_exists(__DIR__ . "/ovningar/ovn_gr$i.php")) {
-            ?> <a href="<?php echo "ovningar/ovn_gr$i.php" ?>">Övning Grund <?php echo $i; ?></a><br> <?php
-        }
-    }
-    for ($i = 0; $i < 999; $i++) {
-        if (file_exists(__DIR__ . "/ovningar/ovn_fr$i.php")) {
-            ?> <a href="<?php echo "ovningar/ovn_fr$i.php" ?>">Övning Formulär <?php echo $i; ?></a><br> <?php
-        }
-    }
-    ?>
-</body>
+</article>
+</div>
 
-</html>
+<?php include("incl/footer.php"); ?>
