@@ -13,7 +13,7 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Uppgift 1</title>
+    <title>Uppgift 3</title>
 
     <style>
         .flex {
