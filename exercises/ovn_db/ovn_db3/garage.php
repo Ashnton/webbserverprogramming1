@@ -28,7 +28,7 @@
 
             while ($res = $stmt->fetch(PDO::FETCH_ASSOC)) {
             ?>
-                <option value="<?php echo $res["name"]; ?>"><?php echo $res["name"]; ?></option>
+                <option value="<?php echo $res["garageid"]; ?>"><?php echo $res["name"]; ?></option>
             <?php
             }
             ?>
@@ -42,7 +42,7 @@
 
             while ($res = $stmt->fetch(PDO::FETCH_ASSOC)) {
             ?>
-                <option value="<?php echo $res["name"]; ?>"><?php echo $res["name"]; ?></option>
+                <option value="<?php echo $res["ownerid"]; ?>"><?php echo $res["name"]; ?></option>
             <?php
             }
             ?>
