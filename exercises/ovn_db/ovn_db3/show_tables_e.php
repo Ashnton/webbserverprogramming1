@@ -98,7 +98,6 @@
         </tr>
         <?php
         while ($res = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            print_r($res);
         ?>
 
             <tr>
