@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS answers (
     is_correct TINYINT(1) NOT NULL DEFAULT 0,
     is_enabled TINYINT(1) NOT NULL DEFAULT 1,
     FOREIGN KEY (question_id) REFERENCES questions(id) ON DELETE CASCADE
-)
+);
 
 -- Tabell för resultat
 CREATE TABLE IF NOT EXISTS results (
@@ -57,4 +57,4 @@ CREATE TABLE IF NOT EXISTS user_answers (
     FOREIGN KEY (result_id) REFERENCES results(id) ON DELETE CASCADE,
     FOREIGN KEY (question_id) REFERENCES questions(id) ON DELETE CASCADE,
     FOREIGN KEY (answer_id) REFERENCES answers(id) ON DELETE CASCADE
-)
+);
