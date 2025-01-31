@@ -1,16 +1,21 @@
 <?php
 session_start();
 
-require_once __DIR__ . '/../../../dbconnect.php';
+require_once __DIR__ . '/../dbconnect.php';
 
-$sql = "SELECT * FROM users WHERE username = ?";
-$data = [$username];
-$stmt = $dbconn->prepare($sql);
+if (!isset($username)) {
+    $username = $_POST["username"];
+}
+
+$stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
+$stmt->bind_param("s", $username);
 $stmt->execute($data);
 
-if ($stmt->rowCount() > 0) {
+$results = $stmt->get_result();
 
-    while ($res = $stmt->fetch(PDO::FETCH_ASSOC)) {
+if (mysqli_num_rows($results) > 0) {
+
+    foreach ($results as $res) {
         $hash = $res["password"];
 
         if (password_verify($password, $hash)) {
