@@ -43,7 +43,7 @@ foreach ($stmt->get_result() as $result_name) {
 
         $questionsDbResult = $stmt->get_result();
         foreach ($questionsDbResult as $questions) {
-            echo $questions['question_text'];
+            ?> <h3> <?php echo $questions['question_text']; ?> </h3> <?php
 
             $stmt = $conn->prepare("SELECT id, answer_text FROM answers WHERE is_enabled = ? AND question_id = ?");
             $stmt->bind_param("ii", $one, $questions["id"]);
@@ -52,8 +52,9 @@ foreach ($stmt->get_result() as $result_name) {
             $answersDbResult = $stmt->get_result();
             foreach ($answersDbResult as $answers) {
         ?>
-                <label for="answer-<?php echo $answers["id"]; ?>"><?php echo $answers["answer_text"]; ?></label>
                 <input type="radio" id="answer-<?php echo $answers["id"]; ?>" value="<?php echo $answers["answer_text"]; ?>" name="question-<?php echo $questions["id"]; ?>">
+                <label for="answer-<?php echo $answers["id"]; ?>"><?php echo $answers["answer_text"]; ?></label>
+                <br>
         <?php
             }
         }

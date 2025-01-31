@@ -21,7 +21,7 @@ require_once __DIR__ . '/../dbconnect.php';
 
 <body>
     <form action="../endpoints/admin/add_answer.php" method="post">
-        <input type="hidden" name="question_id" value="<?php echo $_GET["question_id"];?>">
+        <input type="hidden" name="question_id" value="<?php echo $_GET["question_id"]; ?>">
 
         <label for="answer">Lägg till svar:</label>
         <input type="text" name="answer">
@@ -30,8 +30,19 @@ require_once __DIR__ . '/../dbconnect.php';
         <label for="is_correct">Fel</label>
         <input type="radio" name="is_correct" id="is_correct" value="0">
 
-        <button type="submit">Spara fråga</button>
+        <button type="submit">Spara svar</button>
     </form>
+
+    <?php
+    $stmt = $conn->prepare("SELECT test_id FROM questions WHERE id = ?");
+    $stmt->bind_param("i", $_GET["question_id"]);
+    $stmt->execute();
+
+    $test_id = $stmt -> get_result() -> fetch_all()[0][0];
+    ?>
+
+    <a href="create_question.php?test_id=<?php echo $test_id; ?>">Skapa ny fråga</a>
+    <a href="dashboard.php">Tillbaka</a>
 </body>
 
 </html>

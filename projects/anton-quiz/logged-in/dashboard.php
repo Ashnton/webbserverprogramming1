@@ -48,9 +48,8 @@ require_once __DIR__ . '/../dbconnect.php';
 
             if (mysqli_num_rows($resultsDbResult) > 0) {
                 ?>
-                <h3>Resultat:</h3>
                 <!-- Kolla user med session i result.php -->
-                <a href="result.php?test_id=<?php echo $tests['id']?>"><?php echo $tests["test_name"] ?></a>
+                <a href="result.php?test_id=<?php echo $tests['id']?>">Resultat: <?php echo $tests["test_name"] ?></a><br>
                 <?php
             }
     
@@ -59,6 +58,8 @@ require_once __DIR__ . '/../dbconnect.php';
         }
         ?>
     </div>
+
+    <a href="../endpoints/log-out.php">Logga ut</a>
 </body>
 
 </html>

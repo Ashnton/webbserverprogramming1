@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 if (!$_SESSION["id"]) {
     header('Location: ../index.php');
@@ -12,7 +11,6 @@ $test_id = $_GET["test_id"];
 $stmt = $conn->prepare("SELECT test_name FROM tests WHERE id = ?");
 $stmt->bind_param("i", $test_id);
 $stmt->execute();
-
 $test_name = $stmt->get_result()->fetch_all()[0][0];
 ?>
 
@@ -21,59 +19,82 @@ $test_name = $stmt->get_result()->fetch_all()[0][0];
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Resultat</title>
 </head>
 
 <body>
 
     <h1><?php echo $test_name; ?></h1>
 
-    <input type="hidden" name="test_id" value="<?php echo $test_id; ?>">
-
     <?php
-    $one = 1;
-
-    $stmt = $conn->prepare("SELECT id, score, taken_at FROM results WHERE user_id = ? AND test_id = ?");
+    // Hämta samtliga resultat (om användaren gjort quizet flera gånger)
+    $stmt = $conn->prepare("
+    SELECT id, score, taken_at 
+    FROM results 
+    WHERE user_id = ? 
+      AND test_id = ?
+    ORDER BY taken_at DESC
+");
     $stmt->bind_param("ii", $_SESSION["id"], $test_id);
     $stmt->execute();
+    $results = $stmt->get_result();
 
-    foreach ($stmt->get_result() as $result) {
-        echo $result["taken_at"];
+    if ($results->num_rows === 0) {
+        echo "<p>Inga gjorda testomgångar hittades för detta test.</p>";
+    } else {
+        // Gå igenom alla resultat (om man gjort testet flera gånger)
+        while ($result = $results->fetch_assoc()) {
+            echo "<hr>";
+            echo "<h2>Test gjort: " . $result["taken_at"] . "</h2>";
+            echo "<p>Poäng: " . $result["score"] . "</p>";
 
-        $stmt = $conn->prepare("SELECT id, question_text FROM questions WHERE is_enabled = ? AND test_id = ?");
-        $stmt->bind_param("ii", $one, $test_id);
-        $stmt->execute();
+            // Hämta alla frågor för detta test
+            $stmtQ = $conn->prepare("
+            SELECT id, question_text
+            FROM questions
+            WHERE is_enabled = 1
+              AND test_id = ?
+        ");
+            $stmtQ->bind_param("i", $test_id);
+            $stmtQ->execute();
+            $questionsDbResult = $stmtQ->get_result();
 
-        $questionsDbResult = $stmt->get_result();
+            // Skriv ut varje fråga och kolla om användaren svarade rätt eller fel
+            while ($question = $questionsDbResult->fetch_assoc()) {
+                echo "<h3>" . $question['question_text'] . "</h3>";
 
-        foreach ($questionsDbResult as $questions) {
-            echo $questions['question_text'];
+                // Hämta användarens svar för just denna fråga + result_id
+                $stmtA = $conn->prepare("
+                SELECT a.answer_text, ua.is_correct
+                FROM user_answers ua
+                JOIN answers a ON a.id = ua.answer_id
+                WHERE ua.result_id = ?
+                  AND ua.question_id = ?
+            ");
+                $stmtA->bind_param("ii", $result["id"], $question["id"]);
+                $stmtA->execute();
+                $userAnswerResult = $stmtA->get_result();
 
-            $stmt = $conn->prepare("SELECT u.id as 'user_answer_id', u.result_id as 'result_id', u.question_id as 'question_id', u.is_correct as 'is_correct', a.id as 'answer_id', a.answer_text as 'answer_text' FROM user_answers u JOIN answers a ON u.answer_id = a.id WHERE u.question_id = ?");
-            $stmt->bind_param("i", $questions["id"]);
-            $stmt->execute();
-
-            $answersDbResult = $stmt->get_result();
-            foreach ($answersDbResult as $answers) {
-                if ($answers["is_correct"]) {
-                ?>
-                    <label for="answer-<?php echo $answers["answer_id"]; ?>" style="color: green;"><?php echo $answers["answer_text"]; ?></label>
-                    <input type="radio" id="answer-<?php echo $answers["answer_id"]; ?>" value="<?php echo $answers["answer_text"]; ?>" name="question-<?php $questions["id"]; ?>">
-                <?php
+                // Om användaren svarade på frågan
+                if ($userAnswer = $userAnswerResult->fetch_assoc()) {
+                    // Kolla om användarens valda svar var rätt eller fel
+                    if ($userAnswer["is_correct"] == 1) {
+                        // Visar användarens svar i grönt
+                        echo "<p style='color: green;'>Ditt svar: " . $userAnswer["answer_text"] . " (Rätt)</p>";
+                    } else {
+                        // Visar användarens svar i rött
+                        echo "<p style='color: red;'>Ditt svar: " . $userAnswer["answer_text"] . " (Fel)</p>";
+                    }
                 } else {
-                ?>
-                    <label for="answer-<?php echo $answers["answer_id"]; ?>" style="color: red;"><?php echo $answers["answer_text"]; ?></label>
-                    <input type="radio" id="answer-<?php echo $answers["answer_id"]; ?>" value="<?php echo $answers["answer_text"]; ?>" name="question-<?php $questions["id"]; ?>">
-                <?php
-
+                    // Om det saknas användarsvar kan man t.ex. skriva ut detta
+                    echo "<p style='color: grey;'>Ingen svar angavs för denna fråga.</p>";
                 }
             }
         }
     }
     ?>
 
-
+    <a href="dashboard.php">Tillbaka</a>
 </body>
 
 </html>
