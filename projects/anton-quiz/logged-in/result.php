@@ -50,22 +50,22 @@ $test_name = $stmt->get_result()->fetch_all()[0][0];
         foreach ($questionsDbResult as $questions) {
             echo $questions['question_text'];
 
-            $stmt = $conn->prepare("SELECT u.id as 'user_answer_id', u.result_id as 'result_id', u.question_id as 'question_id', u.is_correct as 'is_correct', a.id as 'answer_id', a.answer_text as 'answer_text' FROM user_answers u JOIN answers a ON u.question_id=a.question_id WHERE question_id = ?");
-            $stmt->bind_param("ii", $one, $questions["id"]);
+            $stmt = $conn->prepare("SELECT u.id as 'user_answer_id', u.result_id as 'result_id', u.question_id as 'question_id', u.is_correct as 'is_correct', a.id as 'answer_id', a.answer_text as 'answer_text' FROM user_answers u JOIN answers a ON u.answer_id = a.id WHERE u.question_id = ?");
+            $stmt->bind_param("i", $questions["id"]);
             $stmt->execute();
 
             $answersDbResult = $stmt->get_result();
             foreach ($answersDbResult as $answers) {
                 if ($answers["is_correct"]) {
-    ?>
-                    <label for="answer-<?php echo $answers["id"]; ?>" style="color: green;"><?php echo $answers["answer_text"]; ?></label>
-                    <input type="radio" id="answer-<?php echo $answers["id"]; ?>" value="<?php echo $answers["answer_text"]; ?>" name="question-<?php $questions["id"]; ?>">
+                ?>
+                    <label for="answer-<?php echo $answers["answer_id"]; ?>" style="color: green;"><?php echo $answers["answer_text"]; ?></label>
+                    <input type="radio" id="answer-<?php echo $answers["answer_id"]; ?>" value="<?php echo $answers["answer_text"]; ?>" name="question-<?php $questions["id"]; ?>">
                 <?php
                 } else {
                 ?>
-                    <label for="answer-<?php echo $answers["id"]; ?>" style="color: red;"><?php echo $answers["answer_text"]; ?></label>
-                    <input type="radio" id="answer-<?php echo $answers["id"]; ?>" value="<?php echo $answers["answer_text"]; ?>" name="question-<?php $questions["id"]; ?>">
-    <?php
+                    <label for="answer-<?php echo $answers["answer_id"]; ?>" style="color: red;"><?php echo $answers["answer_text"]; ?></label>
+                    <input type="radio" id="answer-<?php echo $answers["answer_id"]; ?>" value="<?php echo $answers["answer_text"]; ?>" name="question-<?php $questions["id"]; ?>">
+                <?php
 
                 }
             }

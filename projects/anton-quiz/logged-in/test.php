@@ -8,12 +8,14 @@ if (!$_SESSION["id"]) {
 
 require_once __DIR__ . '/../dbconnect.php';
 
-$test_id = $_GET["test_id"];
+$test_id = $_GET["id"];
 $stmt = $conn->prepare("SELECT test_name FROM tests WHERE id = ?");
 $stmt->bind_param("i", $test_id);
 $stmt->execute();
 
-$test_name = $stmt->get_result()->fetch_all()[0][0];
+foreach ($stmt->get_result() as $result_name) {
+    $test_name = $result_name["test_name"];
+}
 ?>
 
 <!DOCTYPE html>
@@ -51,7 +53,7 @@ $test_name = $stmt->get_result()->fetch_all()[0][0];
             foreach ($answersDbResult as $answers) {
         ?>
                 <label for="answer-<?php echo $answers["id"]; ?>"><?php echo $answers["answer_text"]; ?></label>
-                <input type="radio" id="answer-<?php echo $answers["id"]; ?>" value="<?php echo $answers["answer_text"]; ?>" name="question-<?php $questions["id"]; ?>">
+                <input type="radio" id="answer-<?php echo $answers["id"]; ?>" value="<?php echo $answers["answer_text"]; ?>" name="question-<?php echo $questions["id"]; ?>">
         <?php
             }
         }

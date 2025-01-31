@@ -28,17 +28,18 @@ if ($stmt->execute()) {
         $stmt->execute();
 
         foreach ($stmt->get_result() as $answer) {
-            if ($_POST["question-$test_id"] == $answer["answer_text"]) {
+            if ($_POST["question-". $question["id"]] == $answer["answer_text"]) {
                 $stmt = $conn->prepare("INSERT INTO user_answers (result_id, question_id, answer_id, is_correct) VALUES (?, ?, ?, ?)");
                 $stmt->bind_param("iiii", $result_id, $question["id"], $answer["id"], $answer["is_correct"]);
                 if (!$stmt->execute()) {
                     echo 'Kunde inte lägga till användarens svar i tabellen user_answers';
+                } else {
+                    header('Location: ../logged-in/dashboard.php');
                 }
             }
         }
     }
 
-    header('Location: ../logged_in/dashboard.php');
 } else {
     echo 'Kunde inte lägga till rad i results';
 }

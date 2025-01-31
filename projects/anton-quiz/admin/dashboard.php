@@ -23,7 +23,7 @@ require_once __DIR__ . '/../dbconnect.php';
 
     <h1>Admin dashboard</h1>
 
-    <a href="create_quiz">Skapa nytt quiz</a>
+    <a href="create_quiz.php">Skapa nytt quiz</a>
 
 </body>
 

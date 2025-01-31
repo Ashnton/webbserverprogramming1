@@ -20,8 +20,8 @@ require_once __DIR__ . '/../dbconnect.php';
 </head>
 
 <body>
-    <form action="../endpoints/admin/add_answers.php" method="post">
-        <input type="hidden" name="question_id" value="<?php $_GET["question_id"];?>">
+    <form action="../endpoints/admin/add_answer.php" method="post">
+        <input type="hidden" name="question_id" value="<?php echo $_GET["question_id"];?>">
 
         <label for="answer">Lägg till svar:</label>
         <input type="text" name="answer">
@@ -29,6 +29,8 @@ require_once __DIR__ . '/../dbconnect.php';
         <input type="radio" name="is_correct" id="is_correct" value="1">
         <label for="is_correct">Fel</label>
         <input type="radio" name="is_correct" id="is_correct" value="0">
+
+        <button type="submit">Spara fråga</button>
     </form>
 </body>
 

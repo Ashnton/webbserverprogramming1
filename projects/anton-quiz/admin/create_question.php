@@ -21,10 +21,12 @@ require_once __DIR__ . '/../dbconnect.php';
 
 <body>
     <form action="../endpoints/admin/add_question.php" method="post">
-        <input type="hidden" name="test_id" value="<?php $_GET["test_id"];?>">
+        <input type="hidden" name="test_id" value="<?php echo $_GET["test_id"];?>">
 
         <label for="question">Lägg till fråga:</label>
         <input type="text" name="question">
+
+        <button type="submit">Spara fråga</button>
     </form>
 </body>
 
