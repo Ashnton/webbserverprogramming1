@@ -109,7 +109,7 @@ $allResults = $stmtResults->get_result();
                         <td><?php echo $row["taken_at"]; ?></td>
                         <td>
                             <!-- Exempel-länk, om du t.ex. vill visa detaljerade svar: -->
-                            <a href="admin_view_details.php?result_id=<?php echo $row["result_id"]; ?>">
+                            <a href="view_details.php?result_id=<?php echo $row["result_id"]; ?>">
                                 Visa detaljer
                             </a>
                         </td>

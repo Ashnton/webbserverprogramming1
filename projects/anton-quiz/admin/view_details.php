@@ -9,7 +9,7 @@ if (!isset($_SESSION["is_admin"]) || $_SESSION["is_admin"] != 1) {
 
 require_once __DIR__ . '/../dbconnect.php';
 
-// 1) Hämta result_id från GET (ex: admin_view_details.php?result_id=123)
+// 1) Hämta result_id från GET
 $result_id = $_GET['result_id'] ?? 0;
 $result_id = (int)$result_id;
 if ($result_id <= 0) {

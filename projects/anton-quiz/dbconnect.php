@@ -5,7 +5,8 @@ require __DIR__ . '/../../envparser.php';
 $envFilePath = __DIR__ . '/../../credentials.env'; // Replace with the actual path to your .env file
 $envVars = parseEnvFile($envFilePath);
 
-$dbname = 'quizdb';
+$dbname = 'antonlm';
+// $dbname = 'quizdb';
 $hostname = 'localhost';
 $DB_USER = $envVars["user"];
 $DB_PASSWORD = $envVars["password"];
