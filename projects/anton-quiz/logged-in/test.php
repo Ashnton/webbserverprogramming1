@@ -9,7 +9,7 @@ if (!$_SESSION["id"]) {
 require_once __DIR__ . '/../dbconnect.php';
 
 $test_id = $_GET["id"];
-$stmt = $conn->prepare("SELECT test_name FROM tests WHERE id = ?");
+$stmt = $conn->prepare("SELECT test_name FROM quizdb_tests WHERE id = ?");
 $stmt->bind_param("i", $test_id);
 $stmt->execute();
 
@@ -37,7 +37,7 @@ foreach ($stmt->get_result() as $result_name) {
         <?php
         $one = 1;
 
-        $stmt = $conn->prepare("SELECT id, question_text FROM questions WHERE is_enabled = ? AND test_id = ?");
+        $stmt = $conn->prepare("SELECT id, question_text FROM quizdb_questions WHERE is_enabled = ? AND test_id = ?");
         $stmt->bind_param("ii", $one, $test_id);
         $stmt->execute();
 
@@ -45,7 +45,7 @@ foreach ($stmt->get_result() as $result_name) {
         foreach ($questionsDbResult as $questions) {
             ?> <h3> <?php echo $questions['question_text']; ?> </h3> <?php
 
-            $stmt = $conn->prepare("SELECT id, answer_text FROM answers WHERE is_enabled = ? AND question_id = ?");
+            $stmt = $conn->prepare("SELECT id, answer_text FROM quizdb_answers WHERE is_enabled = ? AND question_id = ?");
             $stmt->bind_param("ii", $one, $questions["id"]);
             $stmt->execute();
 

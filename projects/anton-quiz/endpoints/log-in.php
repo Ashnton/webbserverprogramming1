@@ -10,7 +10,7 @@ if (!isset($password)) {
     $password = $_POST["password"];
 }
 
-$stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
+$stmt = $conn->prepare("SELECT * FROM quizdb_users WHERE username = ?");
 $stmt->bind_param("s", $username);
 $stmt->execute();
 

@@ -29,7 +29,7 @@ require_once __DIR__ . '/../dbconnect.php';
     <div>
         <?php
 
-        $stmt = $conn->prepare("SELECT * FROM tests");
+        $stmt = $conn->prepare("SELECT * FROM quizdb_tests");
         $stmt->execute();
         $tests = $stmt->get_result();
         foreach ($tests as $test) {

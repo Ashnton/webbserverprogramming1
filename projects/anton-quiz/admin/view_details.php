@@ -24,9 +24,9 @@ $stmtResultInfo = $conn->prepare("
            r.taken_at,
            t.test_name,
            u.username
-    FROM results r
-    JOIN tests t ON r.test_id = t.id
-    JOIN users u ON r.user_id = u.id
+    FROM quizdb_results r
+    JOIN quizdb_tests t ON r.test_id = t.id
+    JOIN quizdb_users u ON r.user_id = u.id
     WHERE r.id = ?
 ");
 $stmtResultInfo->bind_param("i", $result_id);
@@ -42,9 +42,9 @@ if (!$resultInfo) {
 // 3) Hämta info om alla frågor + svarsalternativ som användaren valt
 $stmtDetails = $conn->prepare("
     SELECT q.question_text, a.answer_text, ua.is_correct
-    FROM user_answers ua
-    JOIN questions q ON ua.question_id = q.id
-    JOIN answers a ON ua.answer_id = a.id
+    FROM quizdb_user_answers ua
+    JOIN quizdb_questions q ON ua.question_id = q.id
+    JOIN quizdb_answers a ON ua.answer_id = a.id
     WHERE ua.result_id = ?
     ORDER BY q.id
 ");

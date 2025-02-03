@@ -28,13 +28,13 @@ require_once __DIR__ . '/../dbconnect.php';
         <label for="is_correct">Rätt</label>
         <input type="radio" name="is_correct" id="is_correct" value="1">
         <label for="is_correct">Fel</label>
-        <input type="radio" name="is_correct" id="is_correct" value="0">
+        <input type="radio" name="is_correct" id="is_correct" value="0" checked>
 
         <button type="submit">Spara svar</button>
     </form>
 
     <?php
-    $stmt = $conn->prepare("SELECT test_id FROM questions WHERE id = ?");
+    $stmt = $conn->prepare("SELECT test_id FROM quizdb_questions WHERE id = ?");
     $stmt->bind_param("i", $_GET["question_id"]);
     $stmt->execute();
 

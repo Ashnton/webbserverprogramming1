@@ -8,7 +8,7 @@ if (!$_SESSION["id"]) {
 require_once __DIR__ . '/../dbconnect.php';
 
 $test_id = $_GET["test_id"];
-$stmt = $conn->prepare("SELECT test_name FROM tests WHERE id = ?");
+$stmt = $conn->prepare("SELECT test_name FROM quizdb_tests WHERE id = ?");
 $stmt->bind_param("i", $test_id);
 $stmt->execute();
 $test_name = $stmt->get_result()->fetch_all()[0][0];
@@ -30,7 +30,7 @@ $test_name = $stmt->get_result()->fetch_all()[0][0];
     // Hämta samtliga resultat (om användaren gjort quizet flera gånger)
     $stmt = $conn->prepare("
     SELECT id, score, taken_at 
-    FROM results 
+    FROM quizdb_results 
     WHERE user_id = ? 
       AND test_id = ?
     ORDER BY taken_at DESC
@@ -51,7 +51,7 @@ $test_name = $stmt->get_result()->fetch_all()[0][0];
             // Hämta alla frågor för detta test
             $stmtQ = $conn->prepare("
             SELECT id, question_text
-            FROM questions
+            FROM quizdb_questions
             WHERE is_enabled = 1
               AND test_id = ?
         ");
@@ -66,8 +66,8 @@ $test_name = $stmt->get_result()->fetch_all()[0][0];
                 // Hämta användarens svar för just denna fråga + result_id
                 $stmtA = $conn->prepare("
                 SELECT a.answer_text, ua.is_correct
-                FROM user_answers ua
-                JOIN answers a ON a.id = ua.answer_id
+                FROM quizdb_user_answers ua
+                JOIN quizdb_answers a ON a.id = ua.answer_id
                 WHERE ua.result_id = ?
                   AND ua.question_id = ?
             ");

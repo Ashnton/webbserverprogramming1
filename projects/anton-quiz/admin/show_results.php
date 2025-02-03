@@ -16,7 +16,7 @@ $test_id = (int)$test_id;
 // 2) Hämta info om det specifika testet
 $stmtTest = $conn->prepare("
     SELECT id, test_name, is_enabled
-    FROM tests
+    FROM quizdb_tests
     WHERE id = ?
 ");
 $stmtTest->bind_param("i", $test_id);
@@ -37,7 +37,7 @@ $stmtSummary = $conn->prepare("
         IFNULL(AVG(score), 0) AS average_score,
         IFNULL(MIN(score), 0) AS min_score,
         IFNULL(MAX(score), 0) AS max_score
-    FROM results
+    FROM quizdb_results
     WHERE test_id = ?
 ");
 $stmtSummary->bind_param("i", $test_id);
@@ -51,8 +51,8 @@ $stmtResults = $conn->prepare("
            r.score,
            r.taken_at,
            u.username
-    FROM results r
-    JOIN users u ON r.user_id = u.id
+    FROM quizdb_results r
+    JOIN quizdb_users u ON r.user_id = u.id
     WHERE r.test_id = ?
     ORDER BY r.taken_at DESC
 ");

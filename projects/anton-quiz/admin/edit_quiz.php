@@ -12,7 +12,7 @@ require_once __DIR__ . '/../dbconnect.php';
 $test_id = $_GET["test_id"] ?? 0;
 
 // 1) Hämta testets information
-$stmt = $conn->prepare("SELECT id, test_name, is_enabled FROM tests WHERE id=?");
+$stmt = $conn->prepare("SELECT id, test_name, is_enabled FROM quizdb_tests WHERE id=?");
 $stmt->bind_param("i", $test_id);
 $stmt->execute();
 $test = $stmt->get_result()->fetch_assoc();
@@ -59,7 +59,7 @@ $is_enabled = $test["is_enabled"];
     <h2>Frågor i testet</h2>
     <?php
     // 2) Hämta samtliga frågor som hör till test_id
-    $stmt = $conn->prepare("SELECT id, question_text FROM questions WHERE test_id = ?");
+    $stmt = $conn->prepare("SELECT id, question_text FROM quizdb_questions WHERE test_id = ?");
     $stmt->bind_param("i", $test_id);
     $stmt->execute();
     $questionsDbResult = $stmt->get_result();
@@ -76,7 +76,7 @@ $is_enabled = $test["is_enabled"];
                 // 3) Hämta de svarsalternativ som hör till frågan
                 $stmtAnswers = $conn->prepare("
                     SELECT id, answer_text, is_correct, is_enabled
-                    FROM answers
+                    FROM quizdb_answers
                     WHERE question_id = ?
                 ");
                 $stmtAnswers->bind_param("i", $question["id"]);

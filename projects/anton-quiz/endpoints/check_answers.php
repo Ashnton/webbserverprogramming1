@@ -13,7 +13,7 @@ $test_id = $_POST["test_id"];
 // Sätt in grundrad i results med score = 0
 $zero = 0;
 $stmt = $conn->prepare("
-    INSERT INTO results (user_id, test_id, score) 
+    INSERT INTO quizdb_results (user_id, test_id, score) 
     VALUES (?, ?, ?)
 ");
 $stmt->bind_param("iii", $_SESSION["id"], $test_id, $zero);
@@ -29,7 +29,7 @@ $result_id = $conn->insert_id;
 // Hämta frågor som tillhör testet
 $stmt = $conn->prepare("
     SELECT id 
-    FROM questions 
+    FROM quizdb_questions 
     WHERE test_id = ?
 ");
 $stmt->bind_param("i", $test_id);
@@ -45,7 +45,7 @@ while ($question = $questionsResult->fetch_assoc()) {
     // Hämta alla *aktiva* svarsalternativ för denna fråga
     $stmtAnswers = $conn->prepare("
         SELECT id, answer_text, is_correct 
-        FROM answers 
+        FROM quizdb_answers 
         WHERE question_id = ? 
           AND is_enabled = 1
     ");
@@ -63,7 +63,7 @@ while ($question = $questionsResult->fetch_assoc()) {
         if ($userPostedAnswer == $answer["answer_text"]) {
             // Infoga rad i user_answers
             $stmtUA = $conn->prepare("
-                INSERT INTO user_answers (result_id, question_id, answer_id, is_correct) 
+                INSERT INTO quizdb_user_answers (result_id, question_id, answer_id, is_correct) 
                 VALUES (?, ?, ?, ?)
             ");
             $stmtUA->bind_param("iiii", 
@@ -92,7 +92,7 @@ while ($question = $questionsResult->fetch_assoc()) {
 
 // Nu när vi har loopat igenom alla frågor och vet total score, uppdaterar vi results-raden
 $stmtUpdate = $conn->prepare("
-    UPDATE results 
+    UPDATE quizdb_results 
     SET score = ? 
     WHERE id = ?
 ");

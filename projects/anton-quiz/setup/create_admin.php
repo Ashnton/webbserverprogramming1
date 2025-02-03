@@ -19,7 +19,7 @@ $isAdmin = 1;
 
 // 4) Försök att skapa användaren i tabellen "users"
 $stmt = $conn->prepare("
-    INSERT INTO users (username, password, is_admin) 
+    INSERT INTO quizdb_users (username, password, is_admin) 
     VALUES (?, ?, ?)
 ");
 

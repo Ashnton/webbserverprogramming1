@@ -16,7 +16,7 @@ $test_id = (int)$test_id;
 $is_enabled = ($is_enabled == 1) ? 1 : 0;
 
 // Uppdatera i databasen
-$stmt = $conn->prepare("UPDATE tests SET is_enabled = ? WHERE id = ?");
+$stmt = $conn->prepare("UPDATE quizdb_tests SET is_enabled = ? WHERE id = ?");
 $stmt->bind_param("ii", $is_enabled, $test_id);
 $stmt->execute();
 

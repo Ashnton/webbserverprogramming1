@@ -27,7 +27,7 @@ require_once __DIR__ . '/../dbconnect.php';
         <?php
         $one = 1;
 
-        $stmt = $conn->prepare('SELECT * FROM tests WHERE is_enabled = ?');
+        $stmt = $conn->prepare('SELECT * FROM quizdb_tests WHERE is_enabled = ?');
         $stmt->bind_param("i", $one);
         $stmt->execute();
 
@@ -40,7 +40,7 @@ require_once __DIR__ . '/../dbconnect.php';
 
             <?php
             // Kontrollera om användaren gjort ett test tidigare
-            $stmt = $conn -> prepare('SELECT id FROM results WHERE user_id = ? AND test_id = ?');
+            $stmt = $conn -> prepare('SELECT id FROM quizdb_results WHERE user_id = ? AND test_id = ?');
             $stmt -> bind_param('ii', $_SESSION["id"], $tests["id"]);
             $stmt -> execute();
 

@@ -9,7 +9,7 @@ if (!$_SESSION["is_admin"]) {
 
 require_once __DIR__ . '/../../dbconnect.php';
 
-$stmt = $conn -> prepare("INSERT INTO tests (test_name) VALUES (?)");
+$stmt = $conn -> prepare("INSERT INTO quizdb_tests (test_name) VALUES (?)");
 $stmt -> bind_param("s", $_POST["test_name"]);
 if ($stmt -> execute()) {
     $test_id = $conn->insert_id;
