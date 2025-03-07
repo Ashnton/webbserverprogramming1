@@ -58,4 +58,4 @@ CREATE TABLE IF NOT EXISTS quizdb_user_answers (
     FOREIGN KEY (result_id) REFERENCES quizdb_results(id) ON DELETE CASCADE,
     FOREIGN KEY (question_id) REFERENCES quizdb_questions(id) ON DELETE CASCADE,
     FOREIGN KEY (answer_id) REFERENCES quizdb_answers(id) ON DELETE CASCADE
-);
+);antonlm
