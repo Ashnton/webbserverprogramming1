@@ -2,7 +2,7 @@
 session_start();
 
 if (!$_SESSION["permission"]) {
-    echo "Fuck you";
+    echo "Du är inte inloggad med korrekt behörighet";
     die();
 }
 
@@ -36,12 +36,34 @@ if (!$_SESSION["permission"]) {
                 <p>
                     <?php echo $res["item_description"]; ?>
                 </p>
-                <button class="btn-order" onclick="order(<?php echo $res['id']; ?>)">Beställ</button>
+                <button class="btn-order" onclick="sendOrder(<?php echo $res['id']; ?>)">Beställ</button>
             </div>
         <?php
         }
         ?>
     </div>
+
+    <script>
+        function sendOrder(itemId) {
+            // Skapa ett FormData-objekt och lägg in alla key-value-par
+            const formData = new FormData();
+            formData.append('item_id', itemId);
+
+            // Skicka POST-förfrågan med fetch
+            const url = '../endpoints/register-order.php';
+            fetch(url, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(result => {
+                    console.log('Svar från servern:', result);
+                })
+                .catch(error => {
+                    console.error('Fel vid förfrågan:', error);
+                });
+        }
+    </script>
 </body>
 
 </html>
