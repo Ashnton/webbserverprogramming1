@@ -10,6 +10,7 @@ class Order
     private string $price;
     private string $token;
     private ?string $created_at;
+    private ?Menu_Item $menuItem = null;
 
     public function __construct(int $item_id, int $customer_id, int $restaurant_id, string $status, string $price, string $token, ?int $order_id = null, ?string $created_at = null)
     {
@@ -36,4 +37,43 @@ class Order
     }
 
     // Metoder för att hämta data
+    public function get_order_id() {
+        return $this->order_id;
+    }
+
+    public function get_item_id() {
+        return $this->item_id;
+    }
+
+    public function get_customer_id() {
+        return $this->customer_id;
+    }
+
+    public function get_restaurant_id() {
+        return $this->restaurant_id;
+    }
+
+    public function get_status() {
+        return $this->status;
+    }
+
+    public function get_price() {
+        return $this->price;
+    }
+
+    public function get_token() {
+        return $this->token;
+    }
+
+    public function get_creation_timestamp() {
+        return $this->created_at;
+    }
+
+    public function set_menu_item(Menu_Item $menuItem): void {
+        $this->menuItem = $menuItem;
+    }
+
+    public function get_menu_item(): ?Menu_Item {
+        return $this->menuItem;
+    }
 }

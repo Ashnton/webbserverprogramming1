@@ -20,6 +20,9 @@ if (!$_SESSION["permission"]) {
 </head>
 
 <body>
+    <?php 
+        include __DIR__ . '/../incl/elements/nav.php';
+    ?>
     <div class="big-flex">
         <?php
         require_once __DIR__ . '/../../../dbconnect.php';

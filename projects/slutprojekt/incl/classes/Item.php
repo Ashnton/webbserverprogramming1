@@ -28,4 +28,33 @@ class Menu_Item
     public static function init_from_db(int $restaurant_id, string $item_name, string $item_description, string $item_price, int $item_enabled, string $item_image, int $item_id) {
         return new self($restaurant_id, $item_name, $item_description, $item_price, $item_enabled, $item_image, $item_id);
     }
+
+    // Metoder för att hämta data
+    public function get_item_id() {
+        return $this->item_id;
+    }
+
+    public function get_restaurant_id() {
+        return $this->restaurant_id;
+    }
+
+    public function get_item_name() {
+        return $this->item_name;
+    }
+
+    public function get_item_description() {
+        return $this->item_description;
+    }
+
+    public function get_item_price() {
+        return $this->item_price;
+    }
+
+    public function get_item_enabled() {
+        return $this->item_enabled;
+    }
+
+    public function get_item_image() {
+        return $this->item_image;
+    }
 }

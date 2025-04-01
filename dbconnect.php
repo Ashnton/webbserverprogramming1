@@ -1,4 +1,3 @@
-<!-- dbconnection.php -->
 <?php
 
 require __DIR__ . '/envparser.php';

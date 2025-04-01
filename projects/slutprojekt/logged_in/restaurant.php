@@ -20,6 +20,9 @@ if (!$_SESSION["permission"]) {
 </head>
 
 <body>
+    <?php
+    include __DIR__ . '/../incl/elements/nav.php';
+    ?>
     <div class="big-flex">
         <?php
         require_once __DIR__ . '/../../../dbconnect.php';
@@ -36,7 +39,7 @@ if (!$_SESSION["permission"]) {
                 <p>
                     <?php echo $res["item_description"]; ?>
                 </p>
-                <button class="btn-order" onclick="sendOrder(<?php echo $res['id']; ?>)">Beställ</button>
+                <button class="btn-order" id="button-order-<?php echo $res['id']; ?>" onclick="sendOrder(<?php echo $res['id']; ?>)">Beställ</button>
             </div>
         <?php
         }
@@ -50,7 +53,7 @@ if (!$_SESSION["permission"]) {
             formData.append('item_id', itemId);
 
             // Skicka POST-förfrågan med fetch
-            const url = '../endpoints/register-order.php';
+            const url = '../endpoints/order-handling/register-order.php';
             fetch(url, {
                     method: 'POST',
                     body: formData
@@ -58,6 +61,13 @@ if (!$_SESSION["permission"]) {
                 .then(response => response.text())
                 .then(result => {
                     console.log('Svar från servern:', result);
+                    if (result.trim() === "success") {
+                        const orderButton = document.getElementById('button-order-' + itemId);
+                        orderButton.innerText = "Beställning mottagen";
+                        orderButton.classList.remove('btn-order');
+                        orderButton.classList.add('btn-order-placed');
+                        orderButton.setAttribute('disabled', "true")
+                    }
                 })
                 .catch(error => {
                     console.error('Fel vid förfrågan:', error);
