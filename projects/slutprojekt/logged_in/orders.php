@@ -17,6 +17,7 @@ if (!$_SESSION["permission"]) {
     <title>Dashboard</title>
 
     <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 </head>
 
 <body>
@@ -47,6 +48,7 @@ if (!$_SESSION["permission"]) {
             $order->set_menu_item($item);
         ?>
             <div class="flex-item">
+                <canvas id="canvas-<?php echo $order->get_order_id();?>"></canvas>
                 <img src="../img/menu-items/<?php echo $order->get_menu_item()->get_item_image(); ?>" class="img-block" alt="Logotyp: <?php echo $order->get_menu_item()->get_item_name(); ?>">
                 <h2>
                     <?php echo $order->get_menu_item()->get_item_name(); ?>
@@ -55,12 +57,28 @@ if (!$_SESSION["permission"]) {
                     <?php echo $order->get_menu_item()->get_item_description(); ?>
                 </p>
                 <button disabled class="btn-order-placed"><?php echo $order->get_status(); ?></button>
+                <button class="btn-order" onclick="generateQR(<?php echo $order->get_order_id();?>, '<?php echo $order->get_token();?>')">Visa QR-kod</button>
             </div>
         <?php
         }
         ?>
 
     </div>
+
+    <script>
+        function generateQR(canvasId, text) {
+            const canvas = document.getElementById('canvas-' + canvasId);
+            QRCode.toCanvas(canvas, text, {
+                width: 200
+            }, function(error) {
+                if (error) {
+                    console.error('Fel vid generering:', error);
+                } else {
+                    console.log('QR-kod genererad!');
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>
