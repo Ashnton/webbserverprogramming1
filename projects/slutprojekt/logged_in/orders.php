@@ -48,7 +48,11 @@ if (!$_SESSION["permission"]) {
             $order->set_menu_item($item);
         ?>
             <div class="flex-item">
-                <canvas id="canvas-<?php echo $order->get_order_id();?>"></canvas>
+
+                <div class="flex-item-qr-code-popup hidden" id="qr-code-popup-<?php echo $order->get_order_id(); ?>">
+                    <canvas id="canvas-<?php echo $order->get_order_id(); ?>"></canvas>
+                    <button class="btn-order" onclick="hideQR(<?php echo $order->get_order_id(); ?>)">Dölj QR-kod</button>
+                </div>
                 <img src="../img/menu-items/<?php echo $order->get_menu_item()->get_item_image(); ?>" class="img-block" alt="Logotyp: <?php echo $order->get_menu_item()->get_item_name(); ?>">
                 <h2>
                     <?php echo $order->get_menu_item()->get_item_name(); ?>
@@ -57,7 +61,7 @@ if (!$_SESSION["permission"]) {
                     <?php echo $order->get_menu_item()->get_item_description(); ?>
                 </p>
                 <button disabled class="btn-order-placed"><?php echo $order->get_status(); ?></button>
-                <button class="btn-order" onclick="generateQR(<?php echo $order->get_order_id();?>, '<?php echo $order->get_token();?>')">Visa QR-kod</button>
+                <button class="btn-order" onclick="generateQR(<?php echo $order->get_order_id(); ?>, '<?php echo $order->get_token(); ?>')">Visa QR-kod</button>
             </div>
         <?php
         }
@@ -77,6 +81,12 @@ if (!$_SESSION["permission"]) {
                     console.log('QR-kod genererad!');
                 }
             });
+
+            document.getElementById('qr-code-popup-' + canvasId).classList.remove('hidden');
+        }
+
+        function hideQR(popupId) {
+            document.getElementById('qr-code-popup-' + popupId).classList.add('hidden');
         }
     </script>
 </body>

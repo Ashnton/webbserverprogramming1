@@ -125,6 +125,18 @@ section {
     color: black;
 }
 
+.flex-item-qr-code-popup {
+    position: fixed;
+    top: 1rem;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+}
+
+.hidden {
+    display: none;
+}
+
 .img-block {
     display: block;
     max-width: 100%;
