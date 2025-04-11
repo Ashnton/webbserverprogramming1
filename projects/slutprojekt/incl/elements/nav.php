@@ -4,6 +4,7 @@
         <ul class="menu">
             <li><a href="dashboard.php">Restauranger</a></li>
             <li><a href="orders.php">Ordrar</a></li>
+            <li><a href="../endpoints/logout.php">Logga ut</a></li>
         </ul>
     </div>
 </nav>
