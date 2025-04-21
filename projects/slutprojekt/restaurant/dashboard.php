@@ -52,7 +52,7 @@ if (!$_SESSION["restaurant_permission"]) {
                     <?php echo $order->get_menu_item()->get_item_description(); ?>
                 </p>
                 <p>
-                    <select name="order-status" id="order-status-<?php echo $order->get_order_id(); ?>" class="btn-order-placed order-status-select">
+                    <select name="order-status" id="order-status-<?php echo $order->get_order_id(); ?>" data-order-id="<?php echo $order->get_order_id(); ?>" class="btn-order-placed order-status-select">
                         <?php
                         $statuses = ["Order placerad", "Mottagen", "Tillagas", "Slutförd"];
                         foreach ($statuses as $status) {
@@ -79,7 +79,29 @@ if (!$_SESSION["restaurant_permission"]) {
     <script>
         document.querySelectorAll('.order-status-select').forEach(element => {
             element.addEventListener('change', () => {
-                
+                let itemId = element.getAttribute('data-order-id');
+
+                // Skapa ett FormData-objekt och lägg in alla key-value-par
+                const formData = new FormData();
+                formData.append('item_id', itemId);
+                formData.append('status', element.value);
+
+                // Skicka POST-förfrågan med fetch
+                const url = '../endpoints/order-handling/update-status.php';
+                fetch(url, {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.text())
+                    .then(result => {
+                        console.log('Svar från servern:', result);
+                        if (result.trim() === "success") {
+                            // Gör något
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Fel vid förfrågan:', error);
+                    });
             })
         });
     </script>
