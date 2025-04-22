@@ -31,49 +31,84 @@ class Order
         return new self($item_id, $customer_id, $restaurant_id, $status, $price, $token);
     }
 
-    public static function init_from_db(int $item_id, int $customer_id, int $restaurant_id, string $status, string $price, string $token, int $order_id, string $created_at) 
+    public static function init_from_db(int $item_id, int $customer_id, int $restaurant_id, string $status, string $price, string $token, int $order_id, string $created_at)
     {
         return new self($item_id, $customer_id, $restaurant_id, $status, $price, $token, $order_id, $created_at);
     }
 
     // Metoder för att hämta data
-    public function get_order_id() {
+    public function get_order_id()
+    {
         return $this->order_id;
     }
 
-    public function get_item_id() {
+    public function get_item_id()
+    {
         return $this->item_id;
     }
 
-    public function get_customer_id() {
+    public function get_customer_id()
+    {
         return $this->customer_id;
     }
 
-    public function get_restaurant_id() {
+    public function get_restaurant_id()
+    {
         return $this->restaurant_id;
     }
 
-    public function get_status() {
+    public function get_status()
+    {
         return $this->status;
     }
 
-    public function get_price() {
+    public function get_price()
+    {
         return $this->price;
     }
 
-    public function get_token() {
+    public function get_token()
+    {
         return $this->token;
     }
 
-    public function get_creation_timestamp() {
+    public function get_creation_timestamp()
+    {
         return $this->created_at;
     }
 
-    public function set_menu_item(Menu_Item $menuItem): void {
+    public function set_menu_item(Menu_Item $menuItem): void
+    {
         $this->menuItem = $menuItem;
     }
 
-    public function get_menu_item(): ?Menu_Item {
+    public function get_menu_item(): ?Menu_Item
+    {
         return $this->menuItem;
+    }
+
+    public function toArray(): array
+    {
+        $data = [
+            'id'             => $this->order_id,
+            'item_id'        => $this->item_id,
+            'customer_id'    => $this->customer_id,
+            'restaurant_id'  => $this->restaurant_id,
+            'status'         => $this->status,
+            'price'          => $this->price,
+            'token'          => $this->token,
+            'created_at'     => $this->created_at,
+        ];
+
+        if ($this->menuItem !== null) {
+            // Include menu item details inline
+            $data['item_name']        = $this->menuItem->get_item_name();
+            $data['item_description'] = $this->menuItem->get_item_description();
+            $data['item_price']       = $this->menuItem->get_item_price();
+            $data['item_enabled']     = $this->menuItem->get_item_enabled();
+            $data['item_image']       = $this->menuItem->get_item_image();
+        }
+
+        return $data;
     }
 }

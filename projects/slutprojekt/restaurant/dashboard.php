@@ -48,7 +48,7 @@ if (!$_SESSION["restaurant_permission"]) {
             }
             $order->set_menu_item($item);
         ?>
-            <div class="flex-item" data-order-token="<?php echo $order->get_token(); ?>">
+            <div class="flex-item" data-order-token="<?php echo $order->get_token(); ?>" id="order-<?php echo $order->get_order_id(); ?>">
                 <img src="../img/menu-items/<?php echo $order->get_menu_item()->get_item_image(); ?>" class="img-block" alt="Logotyp: <?php echo $order->get_menu_item()->get_item_name(); ?>">
                 <h2>
                     <?php echo $order->get_menu_item()->get_item_name(); ?>
@@ -176,7 +176,7 @@ if (!$_SESSION["restaurant_permission"]) {
                 .then(result => {
                     // console.log('Svar från servern:', result);
                     if (result.trim() === "success") {
-                        console.log("success");
+                        document.getElementById('order-' + orderId).remove();
                     }
                 })
                 .catch(error => {
@@ -187,9 +187,77 @@ if (!$_SESSION["restaurant_permission"]) {
     </script>
 
     <script>
-        setInterval(() => {
-            window.location.reload();
-        }, 60000)
+        // Poll every 10 seconds instead of 1 ms
+        const POLL_INTERVAL = 10;
+
+        function fetchNewOrders() {
+            fetch('../endpoints/order-handling/fetch-new-orders.php')
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    return response.json();
+                })
+                .then(orders => {
+                    if (!Array.isArray(orders)) {
+                        console.error('Expected array of orders, got:', orders);
+                        return;
+                    }
+
+                    orders.forEach(order => {
+                        // Skip if already in DOM
+                        if (document.querySelector(`[data-order-token="${order.token}"]`)) {
+                            return;
+                        }
+
+                        const orderEl = document.createElement('div');
+                        orderEl.classList.add('flex-item');
+                        orderEl.setAttribute('data-order-token', order.token);
+                        orderEl.innerHTML = `
+          <img
+            src="../img/menu-items/${order.item_image}"
+            class="img-block"
+            alt="Bild på ${order.item_name}"
+          >
+          <h2>${order.item_name}</h2>
+          <p>${order.item_description}</p>
+          <p>
+            <select
+              name="order-status"
+              id="order-status-${order.id}"
+              data-order-id="${order.id}"
+              class="btn-order-placed order-status-select"
+            >
+              ${["Order placerad", "Mottagen", "Tillagas", "Slutförd"].map(status => `
+                <option value="${status}" ${status === order.status ? 'selected' : ''}>
+                  ${status}
+                </option>
+              `).join('')}
+            </select>
+          </p>
+          <p>
+            <button class="btn-order-placed" onclick="deleteOrder(${order.id})">
+              Radera order
+            </button>
+          </p>
+        `;
+
+                        // Attach change listener once
+                        orderEl.querySelector('.order-status-select')
+                            .addEventListener('change', event => {
+                                const newStatus = event.target.value;
+                                const id = event.target.dataset.orderId;
+                                updateOrderStatus(newStatus, id)
+                            });
+
+                        document.querySelector('.big-flex').append(orderEl);
+                        console.log('Order tillagd')
+                    });
+                })
+                .catch(err => console.error('Fel vid hämtning av nya ordrar:', err));
+        }
+
+        // Start polling
+        fetchNewOrders(); // initial fetch immediately
+        setInterval(fetchNewOrders, POLL_INTERVAL);
     </script>
 
 </body>
