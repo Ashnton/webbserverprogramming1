@@ -17,12 +17,17 @@ if (!$_SESSION["restaurant_permission"]) {
     <title>Dashboard</title>
 
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/scanner.css">
 </head>
 
 <body>
     <?php
     include __DIR__ . '/../incl/elements/nav.php';
     ?>
+    <div class="section">
+        <div id="my-qr-reader">
+        </div>
+    </div>
     <div class="big-flex">
         <?php
         require_once __DIR__ . '/../../../dbconnect.php';
@@ -43,7 +48,7 @@ if (!$_SESSION["restaurant_permission"]) {
             }
             $order->set_menu_item($item);
         ?>
-            <div class="flex-item">
+            <div class="flex-item" data-order-token="<?php echo $order->get_token(); ?>">
                 <img src="../img/menu-items/<?php echo $order->get_menu_item()->get_item_image(); ?>" class="img-block" alt="Logotyp: <?php echo $order->get_menu_item()->get_item_name(); ?>">
                 <h2>
                     <?php echo $order->get_menu_item()->get_item_name(); ?>
@@ -69,7 +74,6 @@ if (!$_SESSION["restaurant_permission"]) {
                         ?>
                     </select>
                 </p>
-                <button class="btn-order" onclick="generateQR(<?php echo $order->get_order_id(); ?>, '<?php echo $order->get_token(); ?>')">Visa QR-kod</button>
             </div>
         <?php
         }
@@ -79,31 +83,80 @@ if (!$_SESSION["restaurant_permission"]) {
     <script>
         document.querySelectorAll('.order-status-select').forEach(element => {
             element.addEventListener('change', () => {
-                let itemId = element.getAttribute('data-order-id');
+                let orderId = element.getAttribute('data-order-id');
 
-                // Skapa ett FormData-objekt och lägg in alla key-value-par
-                const formData = new FormData();
-                formData.append('item_id', itemId);
-                formData.append('status', element.value);
-
-                // Skicka POST-förfrågan med fetch
-                const url = '../endpoints/order-handling/update-status.php';
-                fetch(url, {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => response.text())
-                    .then(result => {
-                        console.log('Svar från servern:', result);
-                        if (result.trim() === "success") {
-                            // Gör något
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Fel vid förfrågan:', error);
-                    });
+                if (updateOrderStatus(element.value, orderId)) {
+                    console.log('Status uppdaterad');
+                }
             })
         });
+    </script>
+    <script
+        src="https://unpkg.com/html5-qrcode">
+    </script>
+    <script>
+        // script.js file
+
+        function domReady(fn) {
+            if (
+                document.readyState === "complete" ||
+                document.readyState === "interactive"
+            ) {
+                setTimeout(fn, 1000);
+            } else {
+                document.addEventListener("DOMContentLoaded", fn);
+            }
+        }
+
+        domReady(function() {
+
+            // If found you qr code
+            function onScanSuccess(decodeText, decodeResult) {
+                let element = document.querySelector(`[data-order-token="${decodeText}"]`);
+                let select = element.querySelector('select');
+                select.value = "Slutförd";
+                orderId = select.getAttribute('data-order-id');
+                element.style.border = "solid 4px green";
+
+                if (updateOrderStatus("Slutförd", orderId)) {
+                    console.log('success');
+                };
+            }
+
+            let htmlscanner = new Html5QrcodeScanner(
+                "my-qr-reader", {
+                    fps: 10,
+                    qrbos: 250
+                }
+            );
+            htmlscanner.render(onScanSuccess);
+        });
+    </script>
+    <script>
+        function updateOrderStatus(status, orderId) {
+            // Skapa ett FormData-objekt och lägg in alla key-value-par
+            const formData = new FormData();
+            formData.append('order_id', orderId);
+            formData.append('status', status);
+
+            // Skicka POST-förfrågan med fetch
+            const url = '../endpoints/order-handling/update-status.php';
+            fetch(url, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(result => {
+                    console.log('Svar från servern:', result);
+                    if (result.trim() === "success") {
+                        return true;
+                    }
+                })
+                .catch(error => {
+                    console.error('Fel vid förfrågan:', error);
+                    return false;
+                });
+        }
     </script>
 
 </body>

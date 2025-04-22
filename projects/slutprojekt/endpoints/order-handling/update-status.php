@@ -10,7 +10,7 @@ require_once __DIR__ . '/../../incl/classes/Item.php';
 test_all($_POST);
 
 $stmt = $dbconn->prepare('UPDATE slutprojekt_orders SET status=? WHERE id=?');
-$params = [$_POST["status"], $_POST["item_id"]];
+$params = [$_POST["status"], $_POST["order_id"]];
 if ($stmt->execute($params)) {
     echo 'success';
 }
