@@ -74,6 +74,9 @@ if (!$_SESSION["restaurant_permission"]) {
                         ?>
                     </select>
                 </p>
+                <p>
+                    <button class="btn-order-placed" onclick="deleteOrder(<?php echo $order->get_order_id(); ?>)">Radera order</button>
+                </p>
             </div>
         <?php
         }
@@ -157,6 +160,36 @@ if (!$_SESSION["restaurant_permission"]) {
                     return false;
                 });
         }
+
+        function deleteOrder(orderId) {
+            // Skapa ett FormData-objekt och lägg in alla key-value-par
+            const formData = new FormData();
+            formData.append('order_id', orderId);
+
+            // Skicka POST-förfrågan med fetch
+            const url = '../endpoints/order-handling/delete-order.php';
+            fetch(url, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(result => {
+                    // console.log('Svar från servern:', result);
+                    if (result.trim() === "success") {
+                        console.log("success");
+                    }
+                })
+                .catch(error => {
+                    console.error('Fel vid förfrågan:', error);
+                    return false;
+                });
+        }
+    </script>
+
+    <script>
+        setInterval(() => {
+            window.location.reload();
+        }, 60000)
     </script>
 
 </body>
