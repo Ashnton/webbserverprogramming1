@@ -31,6 +31,13 @@
         <button type="submit">Skapa konto</button>
     </form>
 
+    <h2>Har du glömt ditt lösenord?</h2>
+    <form action="endpoints/reset_password.php" method="post">
+        <label for="email_reset">Ange din epostadress</label>
+        <input type="email" id="email_reset" name="email">
+        <button type="submit">Återställ lösenord</button>
+    </form>
+
     <h2>Restauranger:</h2>
     <form action="endpoints/restaurant_login.php" method="post">
         <label for="email_login">Epost</label>
