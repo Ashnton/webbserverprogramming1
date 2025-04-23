@@ -245,7 +245,7 @@ if (!$_SESSION["restaurant_permission"]) {
                             .addEventListener('change', event => {
                                 const newStatus = event.target.value;
                                 const id = event.target.dataset.orderId;
-                                updateOrderStatus(newStatus, id)
+                                updateOrderStatus(newStatus, id);
                             });
 
                         document.querySelector('.big-flex').append(orderEl);
